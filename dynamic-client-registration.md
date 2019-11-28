@@ -20,13 +20,16 @@
 This specification defines the APIs for a TPP to submit a Software Statement Assertion to an ASPSP for the purpose of creating OAuth clients that are registered with ASPSP.
 The document goes on to identify a set of situations when a TPP may need to modify the client. The ASPSPs may implement optional APIs defined here to achieve that behaviour or implement a service management capability to deal with these changes.
 The API supercedes the Open Banking OpenID Connect (OIDC) Dynamic Client Registration Profile.
-This follows on from recommendations made in <a href="/wiki/spaces/WOR/pages/619643199/Final+Paper%3A++Preparing+the+ecosystem+for+eIDAS+enhancements" data-linked-resource-id="619643199" data-linked-resource-version="7" data-linked-resource-type="page">Final Paper: Preparing the ecosystem for eIDAS enhancements</a>:<blockquote>
+This follows on from recommendations made in [https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations](https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations).
  
-**6.3.4 Dynamic Client Registration** 
-It is the opinion of the OBIE that ASPSPs will need to ensure that TPPs can be registered in a seamless, ideally fully automated basis with registrations processed and TPP responses provided in real-time to avoid the perception / imposition of obstacles. Capability is already provided by the OBIE to support this via the Participant Identification API.
+> **6.3.4 Dynamic Client Registration** 
+>
+> It is the opinion of the OBIE that ASPSPs will need to ensure that TPPs can be registered in a seamless, ideally fully automated basis with registrations processed and TPP responses provided in real-time to avoid the perception / imposition of obstacles. Capability is already provided by the OBIE to support this via the Participant Identification API.
  
-**6.4.2 Re-registration at ASPSPs** 
-As a result of impact 6.3.1 or 6.3.2, TPPs may be required to re-onboard with ASPSPs that upgrade their Authorisation server capabilities. OBIE suggests that future delivery phases determine the materiality of this issue and the feasibility of ASPSPs parallel running solutions to enable a smooth migration. It is the expectation of IESG TPP representatives that steps be taken to avoid re-registration requirements.</blockquote>
+> **6.4.2 Re-registration at ASPSPs** 
+>
+> As a result of impact 6.3.1 or 6.3.2, TPPs may be required to re-onboard with ASPSPs that upgrade their Authorisation server capabilities. OBIE suggests that future delivery phases determine the materiality of this issue and the feasibility of ASPSPs parallel running solutions to enable a smooth migration. It is the expectation of IESG TPP representatives that steps be taken to avoid re-registration requirements.
+
 ## Document Structure
 
 This document consists of the following parts:
@@ -63,10 +66,9 @@ The Open Banking Dynamic Client Management specification builds upon the capabil
 ## Software Statement
 
 RFC 7591 defines a Software Statement as
-<blockquote>
 
-Software Statement
-
+>Software Statement
+>
       A digitally signed or MACed JSON Web Token (JWT)[RFC7519] that 
       asserts metadata values about the client software.  In some cases,
       a software statement will be issued directly by the client
@@ -77,7 +79,7 @@ Software Statement
       as an input to the evaluation of whether the registration request
       is accepted.  A software statement can be presented to an
       authorization server as part of a client registration request.
-</blockquote>
+>
 
 In our context, a Software Statement may be issued by any actor that is trusted by the authorisation server. This may include, but is not limited to:
 * The TPP itself
@@ -293,11 +295,11 @@ This section of the specification is non-normative. The objective is to provide 
 
 | Data Item |Description |NCA |ETSI format EIDAS Certificate |Open Banking Directory Record |Open Banking Directory SSA |Registration Request |Client Record |Access Token |
 | --- |--- |--- |--- |--- |--- |--- |--- |--- |
-**NCA Registration ID** |**A unique and immutable identifier for a TPP. <BR> The ID is publicly available and visible to all entities** | The NCA is responsible for issuing the ID. <BR>Notes: <BR> - There are some NCAs in Europe that currently do not issue a unique identifier for TPPs. <BR> - The FCA currently mutates the ID when a new role is added to a TPP. However, they have confirmed that this practice will be discontinued and each organisation will have a single immutable registration number. |The NCA registration number is embedded in the Subject field of EIDAS certificates that follow the ETSI standard. |Each PSP in the OB Directory has a unique NCA ID associated with it |Included |Where the client uses MTLS for token endpoint authentication, the NCA registration id forms a part of the `tls_client_auth_subjet_dn` claim.<BR> This is used to bind the client to a specific DN in the certificate used to establish the TLS session. |Referenced |In situations where the token endpoint is protected by MTLS, the client is verified by binding the registered `tls_client_auth_subject_dn` claim with the DN of the certificate used to establish the TLS session |
+**NCA Registration ID** |**A unique and immutable identifier for a TPP. <BR/> The ID is publicly available and visible to all entities** | The NCA is responsible for issuing the ID. <BR/>Notes: <BR/> - There are some NCAs in Europe that currently do not issue a unique identifier for TPPs. <BR/> - The FCA currently mutates the ID when a new role is added to a TPP. However, they have confirmed that this practice will be discontinued and each organisation will have a single immutable registration number. |The NCA registration number is embedded in the Subject field of EIDAS certificates that follow the ETSI standard. |Each PSP in the OB Directory has a unique NCA ID associated with it |Included |Where the client uses MTLS for token endpoint authentication, the NCA registration id forms a part of the `tls_client_auth_subjet_dn` claim.<BR/> This is used to bind the client to a specific DN in the certificate used to establish the TLS session. |Referenced |In situations where the token endpoint is protected by MTLS, the client is verified by binding the registered `tls_client_auth_subject_dn` claim with the DN of the certificate used to establish the TLS session |
 **org_id** |**A unique and immutable identifier for a PSP issued by a Federation Trust Service Provider such as the Open Banking Directory.** | NA |org_id will not be specified on an EIDAS certificate |Issued and maintained by the Directory |Included in the software statement |Specified in the `iss` claim |Referenced |NA |
-**software_id** |**A unique and immutable identifier for a piece of software belonging to a PSP.<BR> The identifier is issued by a Federation Trust Service Provider such as the Open Banking Directory.<BR> A PSP may register one or more software statements.<BR> A software statement can only belong to a single PSP**| NA |Not specified on EIDAS certificates |Issued and maintained by the Directory |Included in the software statement |Not specified in the request object |Referenced |NA |
-**scope** |**A PSP may be registered as a PISP or AISP with the NCA.<BR> This is reflected in the scopes that the TPP can have.** | Registration type - PISP/AISP |Specified in the EIDAS certificates |Maintains a reference of the roles permitted for a TPP. |Included |Specified in the scope claimed. This must be a subset of the scopes in the SSA |Associated with specific scope that the TPP has. |Associated with a sub-set of the scopes permitted to the client |
-**client_id** |**A unique and immutable identifier that identifies a specific OIDC client.<BR> The identifier shared between the ASPSP and TPP.<BR> A TPP may have multiple clients (and client_ids) with each ASPSP.** | NA |Not specified on EIDAS certificates |NA |NA |A TPP may request for a specific client_id to be issued to it. The ASPSP may ignore the claim. |Unique (to the the ASPSP) and immutable identifier |An access token is issued to a specific client. |
+**software_id** |**A unique and immutable identifier for a piece of software belonging to a PSP.<BR/> The identifier is issued by a Federation Trust Service Provider such as the Open Banking Directory.<BR/> A PSP may register one or more software statements.<BR/> A software statement can only belong to a single PSP**| NA |Not specified on EIDAS certificates |Issued and maintained by the Directory |Included in the software statement |Not specified in the request object |Referenced |NA |
+**scope** |**A PSP may be registered as a PISP or AISP with the NCA.<BR/> This is reflected in the scopes that the TPP can have.** | Registration type - PISP/AISP |Specified in the EIDAS certificates |Maintains a reference of the roles permitted for a TPP. |Included |Specified in the scope claimed. This must be a subset of the scopes in the SSA |Associated with specific scope that the TPP has. |Associated with a sub-set of the scopes permitted to the client |
+**client_id** |**A unique and immutable identifier that identifies a specific OIDC client.<BR/> The identifier shared between the ASPSP and TPP.<BR/> A TPP may have multiple clients (and client_ids) with each ASPSP.** | NA |Not specified on EIDAS certificates |NA |NA |A TPP may request for a specific client_id to be issued to it. The ASPSP may ignore the claim. |Unique (to the the ASPSP) and immutable identifier |An access token is issued to a specific client. |
 
 
 # Swagger Specification
