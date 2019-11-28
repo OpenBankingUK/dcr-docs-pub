@@ -18,15 +18,15 @@ The document goes on to identify a set of situations when a TPP may need to modi
 
 The API supercedes the Open Banking OpenID Connect (OIDC) Dynamic Client Registration Profile.
 
-This follows on from recommendations made in <a href="/wiki/spaces/WOR/pages/619643199/Final+Paper%3A++Preparing+the+ecosystem+for+eIDAS+enhancements" data-linked-resource-id="619643199" data-linked-resource-version="7" data-linked-resource-type="page">Final Paper: Preparing the ecosystem for eIDAS enhancements</a>:
-<blockquote>
- <b>6.3.4 Dynamic Client Registration</b>
+This follows on from recommendations made in [Final Paper: Preparing the ecosystem for eIDAS enhancements](https://openbanking.atlassian.net/wiki/spaces/WOR/pages/619643199/Final+Paper%3A++Preparing+the+ecosystem+for+eIDAS+enhancements):
 
-It is the opinion of the OBIE that ASPSPs will need to ensure that TPPs can be registered in a seamless, ideally fully automated basis with registrations processed and TPP responses provided in real-time to avoid the perception / imposition of obstacles. Capability is already provided by the OBIE to support this via the Participant Identification API.
+> <b>6.3.4 Dynamic Client Registration</b>
+>
+>It is the opinion of the OBIE that ASPSPs will need to ensure that TPPs can be registered in a seamless, ideally fully automated basis with registrations processed and TPP responses provided in real-time to avoid the perception / imposition of obstacles. Capability is already provided by the OBIE to support this via the Participant Identification API.
  
- <b>6.4.2 Re-registration at ASPSPs</b>
-
-As a result of impact 6.3.1 or 6.3.2, TPPs may be required to re-onboard with ASPSPs that upgrade their Authorisation server capabilities. OBIE suggests that future delivery phases determine the materiality of this issue and the feasibility of ASPSPs parallel running solutions to enable a smooth migration. It is the expectation of IESG TPP representatives that steps be taken to avoid re-registration requirements.</blockquote>
+><b>6.4.2 Re-registration at ASPSPs</b>
+>
+>As a result of impact 6.3.1 or 6.3.2, TPPs may be required to re-onboard with ASPSPs that upgrade their Authorisation server capabilities. OBIE suggests that future delivery phases determine the materiality of this issue and the feasibility of ASPSPs parallel running solutions to enable a smooth migration. It is the expectation of IESG TPP representatives that steps be taken to avoid re-registration requirements.
 
 ## Document Structure
 
@@ -58,18 +58,17 @@ The specification is designed to offer a high degree of flexibility of implement
 
 The Open Banking Dynamic Client Management specification builds upon the capabilities and concepts introduced by the following standards:
 
-<a href="https://tools.ietf.org/html/rfc7591" class="external-link" rel="nofollow">RFC 7591</a>: OAuth 2.0 Dynamic Client Registration
+- [RFC 7591](https://tools.ietf.org/html/rfc7591): OAuth 2.0 Dynamic Client Registration
+- [RFC 7592](https://tools.ietf.org/html/rfc7592): OAuth 2.0 Dynamic Client Registration Management Protocol
+- [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
 
-<a href="https://tools.ietf.org/html/rfc7592" class="external-link" rel="nofollow">RFC 7592</a>: OAuth 2.0 Dynamic Client Registration Management Protocol
-
-OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1
 
 ## Software Statement
 
-RFC 7591 defines a Software Statement as<blockquote>
-json
-Software Statement
-      A digitally signed or MACed JSON Web Token (JWT) [RFC7519] that
+RFC 7591 defines a Software Statement as
+
+>Software Statement
+>      A digitally signed or MACed JSON Web Token (JWT) [RFC7519] that
       asserts metadata values about the client software.  In some cases,
       a software statement will be issued directly by the client
       developer.  In other cases, a software statement will be issued by
@@ -79,15 +78,14 @@ Software Statement
       as an input to the evaluation of whether the registration request
       is accepted.  A software statement can be presented to an
       authorization server as part of a client registration request.
-</blockquote>
+>
 
 In our context, a Software Statement may be issued by any actor that is trusted by the authorisation server. This may include, but is not limited to:
+- The TPP itself
+- The Directory solution provided by OBIE
+- Another Directory service provider
 
-* The TPP itself
-* The Directory solution provided by OBIE
-* Another Directory service provider
-
-A software statement that is signed by its issuer is referred to as a Software Statement Assertion (SSA). An SSA is represented as a JSON Web Signature (JWS) [<a href="https://tools.ietf.org/html/rfc7515" class="external-link" rel="nofollow">RFC7515</a>].
+A software statement that is signed by its issuer is referred to as a Software Statement Assertion (SSA). An SSA is represented as a JSON Web Signature (JWS) [RFC7515](https://tools.ietf.org/html/rfc7515).
 
 This specification does not dwell upon the parties that should be trusted by an ASPSP.
 An ASPSP must specify on its Developer Portal the parties that it trusts and accepts SSAs from.
@@ -120,7 +118,7 @@ The mechanism for determining the key that is used is not part of this specifica
 
 * The public key must not be embedded in the payload itself (e.g. by using x5c claim in the JOSE header)
 * The URL for the JWKS must not be embedded in the payload itself (e.g. by using x5u claim in the JOSE header)
-* The JWKS must be secured over TLS using TLS 1.2 and the FAPI approved set of ciphers as defined in https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations.
+* The JWKS must be secured over TLS using TLS 1.2 and the FAPI approved set of ciphers as defined in [https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations](https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations).
 
 # Endpoints
 
@@ -258,25 +256,25 @@ An ASPSP may ignore claims in the request that it cannot process.
 
 | Name |Occurrence |XPath |EnhancedDefinition |Class |Codes |Pattern |Location |
 | --- |--- |--- |--- |--- |--- |--- |--- |
-| iss |1..1 |iss |Identifier for the TPP.<BR> This value must be unique for each TPP registered by the issuer of the SSA.<BR> The value must be a Base62 encoded GUID.<BR> For SSAs issued by the OB Directory, this must be the software_id |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Request only |
+| iss |1..1 |iss |Identifier for the TPP.<BR/> This value must be unique for each TPP registered by the issuer of the SSA.<BR/> The value must be a Base62 encoded GUID.<BR/> For SSAs issued by the OB Directory, this must be the software_id |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Request only |
 | iat |1..1 |iat |The time at which the request was issued by the TPP expressed as "seconds since the epoch" |Integer | |Unix timestamp |Request only |
-| exp |1..1 |exp |The time at which the request expires expressed as seconds since the epoch.<BR> An ASPSP processing the request must reject requests where the current time is greater than the time specified in the claim. |Integer | |Unix timestamp |Request only |
-| aud |1..1 |aud |The audience for the request. This should be the unique identifier for the ASPSP issued by the issuer of the software statement.<BR> An ASPSP processing the software statement may validate the value of the claim and reject software statements for which the ASPSP is not the audience.<BR> The value must be a Base62 encoded GUID. |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Request only |
+| exp |1..1 |exp |The time at which the request expires expressed as seconds since the epoch.<BR/> An ASPSP processing the request must reject requests where the current time is greater than the time specified in the claim. |Integer | |Unix timestamp |Request only |
+| aud |1..1 |aud |The audience for the request. This should be the unique identifier for the ASPSP issued by the issuer of the software statement.<BR/> An ASPSP processing the software statement may validate the value of the claim and reject software statements for which the ASPSP is not the audience.<BR/> The value must be a Base62 encoded GUID. |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Request only |
 | jti |1..1 |jti |A unique identifier for the JWT. The value must be a UUIDv4 GUID. |String (36) | |`^[0-9A-F]{8}-[0-9A-F]{4}-4[0-9A-F]{3}-[89AB][0-9A-F]{3}-[0-9A-F]{12}$` |Request only |
 | client_id |0..1 (request) 1..1 (response) |client_id |The client identifier generated by the ASPSP |String (36) | | |Both |
-| client_secret |0..1 |client_secret |A shared secret generated by the ASPSP.<BR> The ASPSP may choose not to generate the client_secret if it does not support client authentication mechanisms that require it. |String (36) | | |Response |
-| redirect_uris |1..* |redirect_uris |Registered URIs the TPP will use to interact with the ASPSP AS.<BR> If the software statement defines a master set of redirect URIs, this must match or be a subset of the redirect URIs in the SSA.<BR> Each of the URIs must adhere to the following rules:<BR> - The URI MUST use the https scheme<BR> - The URI MUST NOT contain a host with a value of localhost<BR> - If the request_uris metadata element is omitted from the request, the entire contents of the `software_redirect_uris` element in the SSA are considered to be requested by the TPP. |String[] (Each string upto 256) | |URL |Both |
-| token_endpoint_auth_method |1..1 | |Specifies which Token endpoint authentication method the TPP wants to use.<BR> `private_key_jwt` : if requested the OP should extract the TPPs JWKS location from the software statement assertion included. |String (32) |private_key_jwt tls_client_auth client_secret_basic client_secret_post | |Both |
+| client_secret |0..1 |client_secret |A shared secret generated by the ASPSP.<BR/> The ASPSP may choose not to generate the client_secret if it does not support client authentication mechanisms that require it. |String (36) | | |Response |
+| redirect_uris |1..* |redirect_uris |Registered URIs the TPP will use to interact with the ASPSP AS.<BR/> If the software statement defines a master set of redirect URIs, this must match or be a subset of the redirect URIs in the SSA.<BR/> Each of the URIs must adhere to the following rules:<BR/> - The URI MUST use the https scheme<BR/> - The URI MUST NOT contain a host with a value of localhost<BR/> - If the request_uris metadata element is omitted from the request, the entire contents of the `software_redirect_uris` element in the SSA are considered to be requested by the TPP. |String[] (Each string upto 256) | |URL |Both |
+| token_endpoint_auth_method |1..1 | |Specifies which Token endpoint authentication method the TPP wants to use.<BR/> `private_key_jwt` : if requested the OP should extract the TPPs JWKS location from the software statement assertion included. |String (32) |private_key_jwt tls_client_auth client_secret_basic client_secret_post | |Both |
 | grant_types |1..* | |A JSON array specifying what the TPP can request to be supplied to the token endpoint as exchange for an access token |String[] (32) |client_credentials authorization_code refresh_token | |Both |
-| response_types |0..* | |A JSON array specifying what the TPP can request to be returned from the ASPSP authorisation endpoint.<BR> ASPSPs MAY reject the request if any of the requested `response_types` are not supported by it (as advertised at its .well-known end-points)<BR> Defaults to code id_token if not specified. |String[] (32) |code code id_token | |Both |
-| software_id |0..* | |If specified, the software_id in the request MUST match the software_id specified in the SSA.<BR> ASPSPs can choose to allow multiple registrations for a given software statement.<BR> The Software ID must be represented as a Base62 UUID |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Both |
+| response_types |0..* | |A JSON array specifying what the TPP can request to be returned from the ASPSP authorisation endpoint.<BR/> ASPSPs MAY reject the request if any of the requested `response_types` are not supported by it (as advertised at its .well-known end-points)<BR/> Defaults to code id_token if not specified. |String[] (32) |code code id_token | |Both |
+| software_id |0..* | |If specified, the software_id in the request MUST match the software_id specified in the SSA.<BR/> ASPSPs can choose to allow multiple registrations for a given software statement.<BR/> The Software ID must be represented as a Base62 UUID |String (18) | |`^[0-9a-zA-Z]{1,18}$` |Both |
 | scope |0..* | |Scopes the client is asking for (if not specified, default scopes are assigned by the AS) |String[] (32) | | |Both |
-| software_statement |1..1 | |Software statement assertion issued by the issuer.<BR> The data model for the software statements issued by the Open Banking directory are documented as part of the Directory Specification. |JWS | | |Both |
+| software_statement |1..1 | |Software statement assertion issued by the issuer.<BR/> The data model for the software statements issued by the Open Banking directory are documented as part of the Directory Specification. |JWS | | |Both |
 | application_type |1..1 | | |String (32) |web mobile | |Both |
 | id_token_signed_response_alg |1..1 | |Algorithm which the TPP expects to sign the id_token, if an id_token is returned. |String (5) |Supported values as constrained by FAPI-RW | |Both |
 | request_object_signing_alg |1..1 | |Algorithm which the TPP expects to sign the request object if a request object will be part of the authorization request sent to the ASPSP. |String (5) |Supported values as constrained by FAPI-RW | |Both |
 | token_endpoint_auth_signing_alg |1..1 | |Algorithm which the TPP uses to authenticate with the token endpoint if using private_key_jwt or client_id_jwt |String (5) |Supported values as constrained by FAPI-RW | |Both |
-| tls_client_auth_dn |0..1 | |This value must be set iff `token_endpoint_auth_method` is set to `tls_client_auth`<BR> The `tls_client_auth_dn` claim MUST contain the DN of the certificate that the TPP will present to the ASPSP token endpoint.<BR> The ASPSP may decide to match only a part of the DN so that the match is based only on the part of the DN that will be immutable for the TPP across all EIDAS certificates issued to it. |String (128) | | |Both |
+| tls_client_auth_dn |0..1 | |This value must be set iff `token_endpoint_auth_method` is set to `tls_client_auth`<BR/> The `tls_client_auth_dn` claim MUST contain the DN of the certificate that the TPP will present to the ASPSP token endpoint.<BR/> The ASPSP may decide to match only a part of the DN so that the match is based only on the part of the DN that will be immutable for the TPP across all EIDAS certificates issued to it. |String (128) | | |Both |
 
 
 ## Error Structure
@@ -289,7 +287,7 @@ This section of the specification is non-normative. The objective is to provide 
 
 | Data Item |Description |NCA |ETSI format EIDAS Certificate |Open Banking Directory Record |Open Banking Directory SSA |Registration Request |Client Record |Access Token |
 | --- |--- |--- |--- |--- |--- |--- |--- |--- |
-| <b>NCA Registration ID</b> |A unique and immutable identifier for a TPP. The ID is publicly available and visible to all entities | The NCA is responsible for issuing the ID.<BR> Notes:<BR> - There are some NCAs in Europe that currently do not issue a unique identifier for TPPs.<BR> - The FCA currently mutates the ID when a new role is added to a TPP.<BR> However, they have confirmed that this practice will be discontinued and each organisation will have a single immutable registration number. |The NCA registration number is embedded in the Subject field of EIDAS certificates that follow the ETSI standard. |Each PSP in the OB Directory has a unique NCA ID associated with it |Included |Where the client uses MTLS for token endpoint authentication, the NCA registration id forms a part of the tls_client_auth_dn claim. This is used to bind the client to a specific DN in the certificate used to establish the TLS session. |Referenced |In situations where the token endpoint is protected by MTLS, the client is verified by binding the registered tls_client_auth_dn claim with the DN of the certificate used to establish the TLS session |
+| <b>NCA Registration ID</b> |A unique and immutable identifier for a TPP. The ID is publicly available and visible to all entities | The NCA is responsible for issuing the ID.<BR/> Notes:<BR/> - There are some NCAs in Europe that currently do not issue a unique identifier for TPPs.<BR/> - The FCA currently mutates the ID when a new role is added to a TPP.<BR/> However, they have confirmed that this practice will be discontinued and each organisation will have a single immutable registration number. |The NCA registration number is embedded in the Subject field of EIDAS certificates that follow the ETSI standard. |Each PSP in the OB Directory has a unique NCA ID associated with it |Included |Where the client uses MTLS for token endpoint authentication, the NCA registration id forms a part of the tls_client_auth_dn claim. This is used to bind the client to a specific DN in the certificate used to establish the TLS session. |Referenced |In situations where the token endpoint is protected by MTLS, the client is verified by binding the registered tls_client_auth_dn claim with the DN of the certificate used to establish the TLS session |
 | <b>org_id</b> |A unique and immutable identifier for a PSP issued by a Federation Trust Service Provider such as the Open Banking Directory. | NA |org_id will not be specified on an EIDAS certificate |Issued and maintained by the Directory |Included in the software statement |Specified in the iss claim |Referenced |NA |
 | <b>software_id</b> |A unique and immutable identifier for a piece of software belonging to a PSP. The identifier is issued by a Federation Trust Service Provider such as the Open Banking Directory. A PSP may register one or more software statements. A software statement can only belong to a single PSP |NA |Not specified on EIDAS certificates |Issued and maintained by the Directory |Included in the software statement |Not specified in the request object |Referenced |NA |
 | <b>scope</b> |A PSP may be registered as a PISP or AISP with the NCA. This is reflected in the scopes that the TPP can have. | Registration type - PISP/AISP |Specified in the EIDAS certificates |Maintains a reference of the roles permitted for a TPP. |Included |Specified in the scope claimed. This must be a subset of the scopes in the SSA |Associated with specific scope that the TPP has. |Associated with a sub-set of the scopes permitted to the client |
@@ -301,6 +299,3 @@ This section of the specification is non-normative. The objective is to provide 
 The Swagger Specification for the Dynamic Client Registration API can be downloaded from the following links:
 * [JSON](https://raw.githubusercontent.com/OpenBankingUK/read-write-api-specs/v3.1-RC1/dist/client-registration-swagger.json)
 * [YAML](https://raw.githubusercontent.com/OpenBankingUK/read-write-api-specs/v3.1-RC1/dist/client-registration-swagger.yaml)
-
-<br>
-<br>
