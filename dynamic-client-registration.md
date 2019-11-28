@@ -245,7 +245,7 @@ An ASPSP may ignore claims in the request that it cannot process.
 
 | Name | Occurence | XPath | Enhanced Definition | Class | Codes | Pattern | Location |
 |---|---|---|---|---|---|---|---|
-| iss                              | 1..1 |iss |Identifier for the TPP.This value must be unique for each TPP registered by the issuer of the SSA.The value must be a Base62 encoded GUID. For SSAs issued by the OB Directory, this must be the software_id. | String (22) || ^[0-9a-zA-Z]{1,22}$ | Request only
+| iss                              | 1..1 |iss |Identifier for the TPP.This value must be unique for each TPP registered by the issuer of the SSA.The value must be a Base62 encoded GUID. For SSAs issued by the OB Directory, this must be the software_id. | String (22) || `^[0-9a-zA-Z]{1,22}$` | Request only
 | iat                              | 1..1 |iat |The time at which the request was issued by the TPP expressed as "seconds since the epoch" |Integer ||Unix timestamp|Request only |
 | exp                              | 1..1 |exp |The time at which the request expires expressed as seconds since the epoch. An ASPSP processing the request must reject requests where the current time is greater than the time specified in the claim. |Integer ||Unix timestamp | Request only
 | aud                              | 1..1 |aud |The audience for the request.This should be the unique identifier for the ASPSP issued by the issuer of the software statement. An ASPSP processing the software statement may validate the value of the claim and reject software statements for which the ASPSP is not the audience.The value must be a Base62 encoded GUID.| String (18) ||^[0-9a-zA-Z]{1,18}$|	Request only
