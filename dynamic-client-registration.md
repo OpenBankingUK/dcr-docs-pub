@@ -1,12 +1,15 @@
 # Dynamic Client Registration v3.3
 
 ## Change log
+
 __Ver 3.3__
+
 - Added reference to CIBA and FAPI-CIBA profile in `Underlying Specifications`
 - Added new grant_type enumeration `urn:openid:params:grant-type:ciba` in the list of grant_types for OBClientRegistrationRequest1
 - Added ciba-specific claims to the list of claims for OBClientRegistrationRequest1
 
 ## Overview
+
 This specification defines the APIs for a TPP to submit a Software Statement Assertion to an ASPSP for the purpose of creating OAuth clients that are registered with ASPSP.
 
 The document goes on to identify a set of situations when a TPP may need to modify the client. The ASPSPs may implement optional APIs defined here to achieve that behaviour or implement a service management capability to deal with these changes.
@@ -25,6 +28,7 @@ This follows on from recommendations made in [Final Paper: Preparing the ecosyst
 > As a result of impact 6.3.1 or 6.3.2, TPPs may be required to re-onboard with ASPSPs that upgrade their Authorisation server capabilities. OBIE suggests that future delivery phases determine the materiality of this issue and the feasibility of ASPSPs parallel running solutions to enable a smooth migration. It is the expectation of IESG TPP representatives that steps be taken to avoid re-registration requirements.
 
 ## Document Structure
+
 This document consists of the following parts:
 
 - __Overview:__ Provides an overview of the scope of the API and the key decisions and principles that contributed to the specification.
@@ -40,7 +44,9 @@ This document consists of the following parts:
 - __Usage Examples__: Examples for how the APIs can be used
 
 ## Basics
+
 ### Problem Space
+
 The Open Banking Read/Write API standard relies on FAPI-RW as a means for authenticating PSUs and TPPs. To enable this capability a TPP must register one or more clients with the ASPSP.
 
 The Dynamic Client Registration APIs allow this to be carried out in a manner that offers very low friction and removes hurdles and barriers to entry for the TPP to interact with the ASPSP.
@@ -48,7 +54,9 @@ The Dynamic Client Registration APIs allow this to be carried out in a manner th
 The specification is designed to offer a high degree of flexibility of implementation.
 
 ### Underlying Specifications
+
 The Open Banking Dynamic Client Management specification builds upon the capabilities and concepts introduced by the following standards:
+
 - [RFC 7591](https://tools.ietf.org/html/rfc7591): OAuth 2.0 Dynamic Client Registration
 - [RFC 7592](https://tools.ietf.org/html/rfc7592): OAuth 2.0 Dynamic Client Registration Management Protocol
 - [OpenID Connect Dynamic Client Registration 1.0 incorporating errata set 1](https://openid.net/specs/openid-connect-registration-1_0.html)
@@ -56,6 +64,7 @@ The Open Banking Dynamic Client Management specification builds upon the capabil
 - [Financial-grade API: Client Initiated Backchannel Authentication Profile](https://openid.net/specs/openid-financial-api-ciba-ID1.html)
 
 ### Software Statement
+
 RFC 7591 defines a Software Statement as
 
 > Software Statement
@@ -72,6 +81,7 @@ RFC 7591 defines a Software Statement as
       authorization server as part of a client registration request.
 
 In our context, a Software Statement may be issued by any actor that is trusted by the authorisation server. This may include, but is not limited to:
+
 - The TPP itself
 - The Directory solution provided by OBIE
 - Another Directory service provider
@@ -87,6 +97,7 @@ This specification does not include the claims that should form a part of the so
 These details should be provided by the software statement issuer and may differ from one issuer to another.
 
 #### Self-signed SSA
+
 An ASPSP may opt to accept SSAs that are issued directly by a TPP without a central issuer.
 
 In such situations, the ASPSP may accept SSAs that are not signed (indicated by a JOSE claim of alg set to none)
@@ -94,9 +105,11 @@ In such situations, the ASPSP may accept SSAs that are not signed (indicated by 
 Where ASPSPs accept self-signed SSAs, they must specify this on their Developer Portal along with the claims that it expects to be included in the SSA.
 
 #### Discovery
-The URL of the registration end-point should be advertised on the ASPSP's OIDC Discovery Endpoint using the registration_endpoint claim as defined in https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata.
+
+The URL of the registration end-point should be advertised on the ASPSP's OIDC Discovery Endpoint using the registration_endpoint claim as defined in [https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata](https://openid.net/specs/openid-connect-discovery-1_0.html#ProviderMetadata).
 
 ### Of JWS & JWKS
+
 The request payload for a Dynamic Client Registration call and the software statement included in the call is structured as a JWS.
 
 In order to verify the contents of the request and the SSA the ecosystem has to rely on a set of JSON Web Key Stores (JWKS) that store the public part of key used to sign the JWT.
@@ -107,9 +120,10 @@ The mechanism for determining the key that is used is not part of this specifica
 
 - The public key must not be embedded in the payload itself (e.g. by using x5c claim in the JOSE header)
 - The URL for the JWKS must not be embedded in the payload itself (e.g. by using x5u claim in the JOSE header)
-- The JWKS must be secured over TLS using TLS 1.2 and the FAPI approved set of ciphers as defined in https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations.
+- The JWKS must be secured over TLS using TLS 1.2 and the FAPI approved set of ciphers as defined in [https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations](https://openid.net/specs/openid-financial-api-part-2.html#tls-considerations).
 
 ## Endpoints
+
 This section provides a list of available API endpoints for Dynamic Client Registration.
 
 The ASPSP may have a different URL for the endpoints as long as it is advertised appropriately in the ASPSP's Discovery endpoint.
@@ -165,6 +179,7 @@ __DELETE /register/{ClientId}__
 | __Idempotency Key__ | No
 
 ### POST /register
+
 The API allows the TPP to request the ASPSP to register (create) a new client
 
 The TPP submits a JWS payload that describes the characteristics of the client to be created.
@@ -176,6 +191,7 @@ The TPP can then use the client to access resources on the ASPSP's resource serv
 If client creation is unsuccessful, the ASPSP responds with an error payload.
 
 ### GET /register/{ClientId}
+
 The API allows the TPP to retrieve the details for a client that has already been registered.
 
 This API is wholly optional for an ASPSP to implement.
@@ -188,8 +204,8 @@ If the request is successful and the identifier matches the client to whom the C
 
 If the ClientId is unknown, the ASPSP responds with an Unauthorized status code and immediately revokes the access token.
 
-
 ### PUT /register/{ClientId}
+
 The API allows the TPP to request the ASPSP to modify one or more attributes related to an existing client.
 
 This API is wholly optional for an ASPSP to implement.
@@ -208,6 +224,7 @@ If the ClientId is unknown, the ASPSP responds with an Unauthorized status code 
 If client modification is unsuccessful, the ASPSP responds with an error payload.
 
 ### DELETE /register/{ClientId}
+
 The API allows the TPP to request the ASPSP to delete an existing client.
 
 This API is wholly optional for an ASPSP to implement.
@@ -221,21 +238,28 @@ If the request is successful and the client Id matches the client to whom the cl
 If the ClientId is unknown, the ASPSP responds with an Unauthorized status code and immediately revokes the access token.
 
 ## Authentication
+
 ### POST Operations
+
 These APIs rely on TLS Mutual Authentication for authenticating the TPP.
 
 ### GET, PUT and DELETE operations
+
 TPPs must authenticate themselves with a client credentials grant in order to get access to the GET, PUT and DELETE operations.
 A scope need not be specified for the grant.
 
-# Data Model
+## Data Model
+
 ## OBClientRegistrationRequest1
+
 ### Data Dictionary
+
 The table below identifies the claims that may be included in a JWT body for a Dynamic Client Registration POST and PUT requests.
 The API responds with the same set of claims, but as part of a JSON object. It includes all the claims in the software_statement provided in the request, but each of these is flattened out as a top-level attribute of the JSON object.
 The last column identifies whether the claims are provided in the request, response or both.
 Prior to making a request, the TPP must query the ASPSP's OIDC .well-known end-point to identify the subset of code values that are supported by the ASPSP.
 If the requests contains a value that the ASPSP does not support, the ASPSP must either:
+
 - reject the request with an appropriate error message and error code
 accept the request and modify the value of the field to one that it supports.
 - It must return the modified value as part of the response.
@@ -269,12 +293,11 @@ An ASPSP may ignore claims in the request that it cannot process.
 | backchannel_token_delivery_mode       | 0..1  | backchannel_token_delivery_mode |As defined in [CIBA - Registration and Discovery Metadata](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-ID1.html#registration). This value MUST be specified iff the grant_types includes `urn:openid:params:grant-type:ciba`  |String (8) | Supported values as constrained by FAPI-CIBA (ie poll or ping, but not push)||Both
 | backchannel_client_notification_endpoint | 0..1  | backchannel_client_notification_endpoint |As defined in [CIBA - Registration and Discovery Metadata](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-ID1.html#registration). This value MUST be specified iff the grant_types includes `urn:openid:params:grant-type:ciba` and `backchannel_token_delivery_mode` is not `poll`. This must be a valid HTTPS URL  |String (256) | ||Both
 | backchannel_authentication_request_signing_alg | 0..1  | backchannel_authentication_request_signing_alg |As defined in [CIBA - Registration and Discovery Metadata](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-ID1.html#registration). This value MUST be specified iff the grant_types includes `urn:openid:params:grant-type:ciba`.  |String (8) | Supported values as constrained by FAPI-CIBA (ie ES256 or PS256) ||Both
-| backchannel_user_code_parameter_supported | 0..1  | backchannel_user_code_parameter_supported |As defined in [CIBA] - Registration and Discovery Metadata](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-ID1.html#registration). This value MUST be specified only if the grant_types includes `urn:openid:params:grant-type:ciba`. If specified, it MUST be set to `false`. |boolean |  ||Both
-
-
+| backchannel_user_code_parameter_supported | 0..1  | backchannel_user_code_parameter_supported |As defined in [CIBA - Registration and Discovery Metadata](https://openid.net/specs/openid-client-initiated-backchannel-authentication-core-1_0-ID1.html#registration). This value MUST be specified only if the grant_types includes `urn:openid:params:grant-type:ciba`. If specified, it MUST be set to `false`. |boolean |  ||Both
 
 ## Error Structure
-In the case where the ASPSP makes a negative determination and refuses to create a client, the ASPSP MUST return a client registration error response to the TPP conforming to Section 3.2.2 of [RFC7591].
+
+In the case where the ASPSP makes a negative determination and refuses to create a client, the ASPSP MUST return a client registration error response to the TPP conforming to Section 3.2.2 of [RFC7591](https://tools.ietf.org/html/rfc7591).
 
 ## Data Mapping
 
@@ -295,6 +318,7 @@ The Swagger Specification for the Dynamic Client Registration API can be downloa
 - [YAML](https://raw.githubusercontent.com/OpenBankingUK/client-registration-api-specs/v3.2-RC1/dist/client-registration-swagger.yaml)
 
 ## Appendix 1: OBIE Directory SSA
+
 This specification does not include the claims that should form a part of the software statement as this should be provided by the software statement issuer and may differ from one issuer to another.
 
-For organizations that rely upon OBIE Directory-issued SSAs, the swagger specification can be found in the repository at [https://github.com/OpenBankingUK/directory-api-specs in the YAML](https://github.com/OpenBankingUK/directory-api-specs/blob/master/directory-api-swagger.yaml) file.
+For organizations that rely upon OBIE Directory-issued SSAs, the swagger specification can be found in the directory api specs repository in the [YAML](https://github.com/OpenBankingUK/directory-api-specs/blob/master/directory-api-swagger.yaml) file.
