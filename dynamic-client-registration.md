@@ -312,6 +312,7 @@ This section of the specification is non-normative. The objective is to provide 
 | client_id           |A unique and immutable identifier that identifies a specific OIDC client. The identifier shared between the ASPSP and TPP. A TPP may have multiple clients (and client_ids) with each ASPSP. | NA	| Not specified on EIDAS certificates|	NA|	NA|	A TPP may request for a specific client_id to be issued to it. The ASPSP may ignore the claim. |	Unique (to the the ASPSP) and immutable identifier|	An access token is issued to a specific client.
 
 ## Swagger Specification
+
 The Swagger Specification for the Dynamic Client Registration API can be downloaded from the following links:
 
 - [JSON](https://raw.githubusercontent.com/OpenBankingUK/client-registration-api-specs/v3.2-RC1/dist/client-registration-swagger.json)
