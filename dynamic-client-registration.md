@@ -313,10 +313,9 @@ This section of the specification is non-normative. The objective is to provide 
 
 ## Swagger Specification
 
-The Swagger Specification for the Dynamic Client Registration API can be downloaded from the following links:
+The Swagger Specification for the Dynamic Client Registration API can be downloaded from the following links, for each release:
 
-- [JSON](https://raw.githubusercontent.com/OpenBankingUK/client-registration-api-specs/v3.2-RC1/dist/client-registration-swagger.json)
-- [YAML](https://raw.githubusercontent.com/OpenBankingUK/client-registration-api-specs/v3.2-RC1/dist/client-registration-swagger.yaml)
+* [Swagger and OpenAPI Specification Releases](https://github.com/OpenBankingUK/client-registration-api-specs/releases)
 
 ## Appendix 1: OBIE Directory SSA
 
